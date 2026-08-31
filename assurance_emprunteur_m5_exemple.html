@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Exemple commenté — deux dossiers, une seule méthode</title>
+<style>
+:root{--prune:#8C1E70;--prune-fonce:#5E1349;--prune-clair:#F4E6EE;--accent:#C77BAA;
+ --vert:#283C28;--gris:#3C3C3C;--gris-moyen:#8A7A85;--filet:#E8DCE5;--creme:#FAF6F8;
+ --ok:#2F7A4F;--ko:#B23B3B;--amb:#B5852A;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--creme);color:var(--gris);
+ font-family:"Nunito","Segoe UI",Helvetica,Arial,sans-serif;font-size:16px;line-height:1.62}
+.wrap{max-width:900px;margin:0 auto;padding:0 18px 60px}
+header.bandeau{background:var(--prune-fonce);color:#fff;padding:18px 0;border-bottom:4px solid var(--accent)}
+header.bandeau .wrap{padding-bottom:0}
+.chapitre{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:#EAD3E3}
+.chapitre span{color:var(--accent);margin:0 6px}
+h1{font-family:Georgia,"Times New Roman",serif;font-size:27px;line-height:1.25;margin:8px 0 4px;color:#fff}
+.sous{color:#EAD3E3;font-size:14.5px;margin:0}
+h2{font-family:Georgia,"Times New Roman",serif;font-size:20px;color:var(--prune-fonce);
+ margin:34px 0 0;padding-bottom:8px;border-bottom:2px solid var(--filet)}
+h2 .num{color:var(--accent);margin-right:8px}
+h3{font-size:15px;color:var(--vert);margin:20px 0 8px;letter-spacing:.02em}
+.carte{background:#fff;border:1px solid var(--filet);border-radius:10px;padding:20px 22px;margin:18px 0;
+ box-shadow:0 1px 2px rgba(94,19,73,.05)}
+.enc{background:var(--prune-clair);border-left:5px solid var(--prune);padding:14px 18px;
+ border-radius:0 8px 8px 0;margin:18px 0;font-size:15.2px}
+.enc .t{display:block;font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;
+ font-weight:800;color:var(--prune-fonce);margin-bottom:6px}
+.enc.al{background:#FBF4F4;border-left-color:var(--ko)}.enc.al .t{color:var(--ko)}
+.enc.ci{background:#FCF8F0;border-left-color:var(--amb)}.enc.ci .t{color:#8A6418}
+.situ{background:#FCF9FB;border:1px dashed var(--filet);border-radius:8px;padding:16px 18px;margin:16px 0;font-size:15.2px}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.duo>div{background:#fff;border:1px solid var(--filet);border-radius:9px;padding:15px 17px;font-size:14.8px}
+.duo .h{font-weight:800;color:var(--prune-fonce);margin-bottom:7px;font-size:14.5px}
+.tri{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}
+.tri>div{background:#fff;border:1px solid var(--filet);border-radius:9px;padding:14px 15px;font-size:14.3px}
+.quad{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0}
+.quad>div{background:#fff;border:1px solid var(--filet);border-radius:9px;padding:12px 13px;font-size:13.6px}
+.quad .h{font-weight:800;color:var(--prune-fonce);margin-bottom:6px;font-size:13px;
+ text-transform:uppercase;letter-spacing:.04em}
+.tri .h{font-weight:800;color:var(--prune-fonce);margin-bottom:6px;font-size:13.5px;
+ text-transform:uppercase;letter-spacing:.05em}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.8px;background:#fff}
+th,td{border:1px solid var(--filet);padding:9px 12px;text-align:left}
+thead th{background:var(--prune-clair);color:var(--prune-fonce);font-size:13.5px}
+tbody th{font-weight:600;color:var(--gris)}
+td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.tot td,tr.tot th{background:#FBF3F8;font-weight:800;color:var(--prune-fonce)}
+.dl{display:inline-flex;align-items:center;gap:9px;background:var(--prune);color:#fff;text-decoration:none;
+ padding:11px 20px;border-radius:8px;font-weight:700;font-size:15px;margin:20px 0 4px}
+.dl:hover{background:var(--prune-fonce)}
+ol.q{padding-left:0;list-style:none;counter-reset:q}
+ol.q>li{margin:16px 0;padding-left:38px;position:relative}
+ol.q>li::before{counter-increment:q;content:counter(q);position:absolute;left:0;top:1px;
+ width:26px;height:26px;border-radius:50%;background:var(--prune-clair);color:var(--prune-fonce);
+ font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center}
+b,strong{color:var(--vert)}
+footer{text-align:center;font-size:12.5px;color:var(--gris-moyen);padding:26px 18px 12px;
+ border-top:1px solid var(--filet);margin-top:44px}
+@media(max-width:860px){.quad{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.duo,.tri,.quad{grid-template-columns:1fr}h1{font-size:22px}}
+@media print{body{background:#fff}.dl{display:none}header.bandeau{background:#5E1349 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style></head>
+<body>
+<header class="bandeau"><div class="wrap">
+ <div class="chapitre">IOBSP Niveau 2 · Journée 10 <span>/</span> Les assurances emprunteurs — Module 5</div><h1>Exemple commenté — deux dossiers, une seule méthode</h1><p class="sous">Vérifier avant de déposer, ou déposer en espérant</p>
+</div></header>
+<div class="wrap">
+
+<div class="carte">
+<div class="enc"><span class="t">LA SITUATION</span>Deux intermédiaires traitent la même semaine un dossier comparable : un client souhaite substituer son assurance de groupe par un contrat individuel, sur un prêt en cours. Le premier dépose la demande dès qu&#x27;il a le devis. Le second commence par demander la fiche standardisée d&#x27;information de la banque. Les deux dossiers ont exactement les mêmes chances au départ. Ils n&#x27;auront pas du tout le même parcours. Dossiers fictifs. Les critères cités sont des exemples de configurations courantes et ne reproduisent pas la liste du CCSF.</div>
+</div>
+<h2>Premier dossier — déposer en espérant</h2>
+<h2>Trois semaines pour apprendre ce qu&#x27;on pouvait savoir en dix minutes</h2>
+<div class="carte">
+<p>L&#x27;intermédiaire transmet la demande le 4 avril. Il reçoit une réponse le 28 avril :</p>
+<p>La banque — « Le contrat proposé ne satisfait pas nos exigences en matière d&#x27;équivalence de garanties. Votre demande est refusée. » Il relance, obtient enfin une motivation : la franchise du nouveau contrat est de 180 jours là où la banque exige 90 jours au plus, et l&#x27;IPP n&#x27;est pas incluse. Il retourne alors vers l&#x27;assureur, fait ajuster les deux points, et redépose. Le dossier aboutira — mais avec près de deux mois de retard, et un client qui a failli renoncer deux fois.</p>
+<div class="enc"><span class="t">CE QUI A ÉTÉ PERDU</span>Rien, sur le fond : le contrat pouvait être ajusté. Mais tout, sur la forme — le temps, la confiance du client, et la crédibilité de l&#x27;intermédiaire. Rappelez-vous le module 4 : un client seul, face à ce premier refus, aurait renoncé.</div>
+</div>
+<h2>Second dossier — vérifier avant de déposer</h2>
+<h2>Le second intermédiaire commence par le bon document</h2>
+<div class="carte">
+<p>Avant toute chose, il récupère la fiche standardisée d&#x27;information de la banque, qui comporte la liste des critères d&#x27;équivalence retenus par l&#x27;établissement. Puis il ouvre les conditions générales du contrat envisagé, et il coche.</p>
+<table><thead><tr>
+<th>Critère exigé par la banque</th>
+<th>Le contrat envisagé</th>
+<th>Verdict</th>
+</tr></thead><tbody>
+<tr><td>Définition de l&#x27;incapacité : profession exercée</td><td>Profession exercée</td><td>✓</td></tr>
+<tr><td>Franchise ITT : 90 jours au plus</td><td>180 jours</td><td>✗</td></tr>
+<tr><td>Indemnisation forfaitaire</td><td>Forfaitaire</td><td>✓</td></tr>
+<tr><td>Garantie IPP incluse</td><td>Non incluse</td><td>✗</td></tr>
+<tr><td>Couverture des affections dorsales</td><td>Incluse</td><td>✓</td></tr>
+<tr><td>Seuil IPT : 66 %</td><td>66 %</td><td>✓</td></tr>
+</tbody></table>
+<p>Deux écarts, identifiés en dix minutes — exactement les deux que le premier intermédiaire découvrira au bout de trois semaines.</p>
+<div class="enc"><span class="t">CE QU&#x27;IL FAIT ENSUITE</span>Il retourne vers l&#x27;assureur avant de déposer et fait ajuster la franchise et ajouter l&#x27;IPP — ce que permet précisément un contrat individuel, comme nous l&#x27;avons vu au module 3. Puis il dépose un dossier dont il a vérifié qu&#x27;il est conforme. La banque accepte dans le délai de dix jours ouvrés.</div>
+</div>
+<h2>Et si le refus était irrégulier ?</h2>
+<h2>La variante que vous rencontrerez</h2>
+<div class="carte">
+<p>Imaginons maintenant que le second intermédiaire, ayant tout vérifié, reçoive malgré tout un refus fondé sur un critère qui ne figure pas sur la fiche standardisée d&#x27;information — par exemple une exigence de couverture des affections psychiques que la banque n&#x27;avait pas retenue.</p>
+<p>Vous — « Nous avons vérifié la conformité du contrat au regard des critères d&#x27;équivalence figurant sur votre fiche standardisée d&#x27;information. Le motif que vous invoquez n&#x27;y figure pas. Nous vous demandons, conformément à l&#x27;article L. 313-30 du code de la consommation qui impose un refus explicite comportant l&#x27;intégralité des motifs, de nous indiquer sur quel critère de votre fiche ce refus se fonde. »</p>
+<div class="enc"><span class="t">POURQUOI CETTE QUESTION EST REDOUTABLE</span>Elle n&#x27;a que deux réponses possibles. • Soit la banque désigne un critère de sa fiche → vous savez quoi corriger, et le dossier avance. • Soit elle ne peut en désigner aucun → son refus tombe.</div>
+<p>Les critères retenus sont les seuls sur lesquels un refus de non-équivalence peut se fonder — et ils ont été annoncés à l&#x27;avance. Une banque ne peut pas ajouter une exigence en cours de route.</p>
+</div>
+<h2>Ce que ces deux dossiers démontrent</h2>
+<div class="carte">
+<table><thead><tr>
+<th>Le premier intermédiaire</th>
+<th>Le second</th>
+</tr></thead><tbody>
+<tr><td>Dépose, puis découvre les exigences</td><td>Lit les exigences, puis dépose</td></tr>
+<tr><td>Apprend les écarts par un refus</td><td>Les identifie en dix minutes, sur un document qu&#x27;il avait le droit d&#x27;obtenir</td></tr>
+<tr><td>Corrige après coup, avec deux mois de retard</td><td>Corrige avant, sans perdre un jour</td></tr>
+<tr><td>Subit la décision de la banque</td><td>Sait, avant de déposer, que le dossier est conforme</td></tr>
+</tbody></table>
+<div class="enc"><span class="t">LE RÉFLEXE À INSTALLER</span>La première question sur un dossier de substitution n&#x27;est pas « quel contrat proposer ? » C&#x27;est : « quels sont les critères retenus par cette banque ? » Et la réponse est écrite, sur un document remis au client dès la simulation.</div>
+<div class="enc"><span class="t">LE FIL DU MODULE</span>Le module 4 vous a donné le droit. Celui-ci vous donne la méthode.</div>
+<p>L&#x27;équivalence se mesure sur une liste publique — 18 critères sur le socle, 8 sur la perte d&#x27;emploi, dont la banque ne peut opposer que 11 et 4 au plus. Ces critères figurent sur la fiche standardisée d&#x27;information, et ce sont les seuls sur lesquels un refus peut se fonder.</p>
+<div class="enc"><span class="t">L&#x27;ÉQUIVALENCE NE SE DISCUTE PAS. ELLE SE VÉRIFIE.</span></div>
+<p>Sources vérifiées au 20 août 2026 : avis du Comité consultatif du secteur financier du 13 janvier 2015 établissant une liste de place de critères d&#x27;équivalence ; plafonnement à onze critères opposables sur le socle et quatre sur la perte d&#x27;emploi ; communication des exigences par la fiche standardisée d&#x27;information ; caractère exclusif des critères retenus pour fonder un refus — sources professionnelles concordantes. Article L. 313-30 du code de la consommation, texte relevé sur Légifrance (module 4). Rappels des modules 2 et 3. Arrêté du 18 juillet 2022, annexe A, section A.4. <b>RÉSERVES</b> : l&#x27;avis du CCSF n&#x27;a pas été consulté directement ; le décompte de « 18 critères » est un décompte d&#x27;usage professionnel qui, selon certaines sources, n&#x27;apparaît pas sous cette forme dans les documents du CCSF — ce qui est constant, ce sont les plafonds de 11 et 4 critères</p>
+<div class="enc"><span class="t">opposables. LES CRITÈRES CITÉS DANS LE TABLEAU DE COMPARAISON SONT DES EXEMPLES DE CONFIGURATIONS COURANTES ET NE REPRODUISENT PAS LA LISTE DU CCSF,</span>qui relève de l&#x27;avis lui-même et des fiches standardisées d&#x27;information de chaque établissement. Dossiers, échanges et dates fictifs.</div>
+</div>
+<footer>TMK Performances - N° Siret : 49841924100027 - Code NAF : 8559A</footer>
+</div></body></html>
